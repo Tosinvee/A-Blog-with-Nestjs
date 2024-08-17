@@ -1,20 +1,24 @@
 /* eslint-disable prettier/prettier */
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { UsersService } from './provider/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { ConfigModule } from '@nestjs/config';
 import profileConfig from './config/profile.config';
+import { AuthModule } from 'src/auth/auth.module';
+import { CreateUserProvider } from './provider/create-user.provider';
 //import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, CreateUserProvider],
   exports: [UsersService],
   //imports: [forwardRef(() => AuthModule)],
-  imports: [TypeOrmModule.forFeature([User]), ConfigModule.forFeature(profileConfig)],
-
+  imports: [TypeOrmModule.forFeature([User]),
+   ConfigModule.forFeature(profileConfig),
+   forwardRef(()=> AuthModule)
+]
 
 })
 export class UsersModule {}

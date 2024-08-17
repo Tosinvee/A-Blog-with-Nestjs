@@ -6,7 +6,7 @@
 import { CreatePostDto } from './dto/create-post.dto';
 import { BadRequestException, Injectable, RequestTimeoutException } from '@nestjs/common';
 //import { MetaOptionsService } from '../meta-options/meta-options.service';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/provider/users.service';
 import { Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { InjectRepository } from '@nestjs/typeorm';

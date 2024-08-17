@@ -6,7 +6,7 @@ import { Request } from 'express';
 import { CreateUserDto } from './dtos/create-users.dto';
 import { GetUsersParamDto } from './dtos/get-users-param.dto';
 import { PatchUserDto } from './dtos/patch-user-dto';
-import { UsersService } from './users.service';
+import { UsersService } from './provider/users.service';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')

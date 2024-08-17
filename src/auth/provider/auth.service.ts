@@ -3,7 +3,7 @@
 /* eslint-disable prettier/prettier */
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/provider/users.service';
 
 @Injectable()
 export class AuthService {

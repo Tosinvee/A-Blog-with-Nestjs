@@ -2,7 +2,7 @@
 /* eslint-disable prefer-const */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { GetUsersParamDto } from './dtos/get-users-param.dto';
+import { GetUsersParamDto } from '../dtos/get-users-param.dto';
 import {
   BadRequestException,
   HttpException,
@@ -12,12 +12,13 @@ import {
   InternalServerErrorException,
   RequestTimeoutException,
 } from '@nestjs/common';
-import { User } from './user.entity';
+import { User } from '../user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from './dtos/create-users.dto';
+import { CreateUserDto } from '../dtos/create-users.dto';
 import { ConfigService, ConfigType } from '@nestjs/config';
-import profileConfig from './config/profile.config';
+import profileConfig from './../config/profile.config';
+import { CreateUserProvider } from './create-user.provider';
 
 /**
  * Controller class for '/users' API endpoint
@@ -29,37 +30,19 @@ export class UsersService {
      * Injecting User repository into UsersService
      * */
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private readonly usersRepository: Repository<User>,
 
     @Inject(profileConfig.KEY)
-    private readonly profileConfiguration:ConfigType<typeof profileConfig>
+    private readonly profileConfiguration:ConfigType<typeof profileConfig>,
+
+    //inject createUserProvider
+    private readonly createUserProvider: CreateUserProvider,
   ) {}
 
  
   public async createUser(createUserDto: CreateUserDto) {
-    let existingUser= undefined
-    // Check if user with email exists
-    try{
-     existingUser = await this.usersRepository.findOne({
-      where: { email: createUserDto.email },
-    });
-  }catch(error){
-    throw new RequestTimeoutException('unable to process your request at the moments ',
-      {
-        description:' Error connecting to the database'
-      }
-    )
+    return this.createUserProvider.createUser(createUserDto)
   }
-  if(existingUser){
-    throw new BadRequestException('user already exixts, please check your email')
-  }
-  
-    let newUser = this.usersRepository.create(createUserDto);
-    newUser = await this.usersRepository.save(newUser);
-    // Create the user
-    return newUser;
-  }
-
   /**
    * Public method responsible for handling GET request for '/users' endpoint
    */
