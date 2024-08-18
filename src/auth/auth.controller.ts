@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './provider/auth.service';
 import { SignInDto } from './dtos/signin.dto';
 
@@ -16,6 +16,7 @@ export class AuthController {
   ) {}
 
   @Post('sign-in')
+  @HttpCode(HttpStatus.OK)
   public async signIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto)
   }

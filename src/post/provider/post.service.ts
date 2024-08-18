@@ -3,18 +3,21 @@
 /* eslint-disable prefer-const */
 /* eslint-disable prettier/prettier */
 
-import { CreatePostDto } from './dto/create-post.dto';
+import { CreatePostDto } from '../dto/create-post.dto';
 import { BadRequestException, Injectable, RequestTimeoutException } from '@nestjs/common';
 //import { MetaOptionsService } from '../meta-options/meta-options.service';
 import { UsersService } from 'src/users/provider/users.service';
 import { Repository } from 'typeorm';
-import { Post } from './post.entity';
+import { Post } from '../post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { TagsService } from 'src/tags/tags.service';
-import { PatchPostDto } from './dto/patch-post.dto';
-import { GetPostsDto } from './dto/get-Post.dto';
+import { PatchPostDto } from '../dto/patch-post.dto';
+import { GetPostsDto } from '../dto/get-Post.dto';
 import { PaginationProvider } from 'src/common/pagination/pagination.provider';
+import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interfaces';
+import { CreatePostProvider } from './create-post.provider';
+
 
 @Injectable()
 export class PostsService {
@@ -38,27 +41,18 @@ export class PostsService {
 
     private readonly tagsService:TagsService,
 
-    private readonly paginationProvider:PaginationProvider
+    private readonly paginationProvider:PaginationProvider,
+
+    private readonly createPostProvider: CreatePostProvider,
   ) {}
 
-  /**
-   * Method to create a new post
+   /**
+   * Creating new posts
    */
-  public async create(createPostDto: CreatePostDto) {
-    //find author from database
-    let author = await this.usersService.findOneById(createPostDto.authorId)
-    //find tags 
-    let tags = await this.tagsService.findMultipleTags(createPostDto.tags)
-    // Create the post
-    let post = this.postsRepository.create({
-      ...createPostDto,
-      author:author,
-      tags: tags
-    });
-
-
-    return await this.postsRepository.save(post);
+   public async create(createPostDto: CreatePostDto, user: ActiveUserData) {
+    return await this.createPostProvider.create(createPostDto, user);
   }
+
 
   public async findAll(postQuery: GetPostsDto ,userId: string) {
     //const user = this.usersService.findOneById(userId);

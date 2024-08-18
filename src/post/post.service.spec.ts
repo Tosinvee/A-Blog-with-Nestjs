@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
-import { PostsService } from './post.service';
+import { PostsService } from './provider/post.service';
 
 describe('PostService', () => {
   let service: PostsService;
