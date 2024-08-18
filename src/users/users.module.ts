@@ -8,12 +8,13 @@ import { ConfigModule } from '@nestjs/config';
 import profileConfig from './config/profile.config';
 import { AuthModule } from 'src/auth/auth.module';
 import { CreateUserProvider } from './provider/create-user.provider';
+import { FindOneUserByEmailProvider } from './provider/find-one-user-by-email.provider';
 //import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService, CreateUserProvider],
-  exports: [UsersService],
+  providers: [UsersService, CreateUserProvider, FindOneUserByEmailProvider],
+  exports: [UsersService,],
   //imports: [forwardRef(() => AuthModule)],
   imports: [TypeOrmModule.forFeature([User]),
    ConfigModule.forFeature(profileConfig),

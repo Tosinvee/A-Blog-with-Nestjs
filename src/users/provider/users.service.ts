@@ -19,6 +19,7 @@ import { CreateUserDto } from '../dtos/create-users.dto';
 import { ConfigService, ConfigType } from '@nestjs/config';
 import profileConfig from './../config/profile.config';
 import { CreateUserProvider } from './create-user.provider';
+import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 
 /**
  * Controller class for '/users' API endpoint
@@ -37,6 +38,8 @@ export class UsersService {
 
     //inject createUserProvider
     private readonly createUserProvider: CreateUserProvider,
+
+    private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider
   ) {}
 
  
@@ -99,5 +102,9 @@ export class UsersService {
     }
     return user
      
+}
+// a function for signup using email to find a user
+public async findOneByEmail(email:string){
+  return this.findOneUserByEmailProvider.findOneByEmail(email)
 }
 }
